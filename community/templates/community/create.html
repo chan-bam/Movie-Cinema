@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% load bootstrap5 %}
+{% block title %} review create{% endblock title %}
+
+{% block content %}
+  <h1 class="fw-bold mt-5 text-center"><i class="icofont icofont-movie text-warning"></i> New Review </h1>
+  <form action="" method="POST" enctype="multipart/form-data" class="col-7 offset-3 mx-auto">
+    <hr class="mb-4">
+    {% if movie_title %} <!--영화 메뉴에서 리뷰 작성으로 접근한 경우-->
+      <p>영화제목: {{ movie_title }}</p>
+    {% endif %}
+    {% csrf_token %}
+    {% bootstrap_form form layout='horizontal' %}
+    <input type="submit" valeue="작성" class="btn btn-secondary offset-3 col-6 mt-4 mb-5">
+  </form>
+
+{% endblock %}

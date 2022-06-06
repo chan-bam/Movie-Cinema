@@ -1,0 +1,99 @@
+{% extends 'base.html' %}
+
+
+{% block title %} review index{% endblock title %}
+
+{% block content %}
+  <div class="container">
+    <h1 class="mt-5 fw-bold text-center">{{ review }}<i class="icofont icofont-movie text-warning"></i> Community</h1>
+    <hr class="mb-5">
+
+<table class="table text-white text-center table-dark table-hover table-striped mb-4">
+  <thead>
+    <tr class="">
+      <th scope="col">글번호</th>
+      <th scope="col">사진</th>
+      <th scope="col">제목</th>
+      <th scope="col">작성자</th>
+      <th scope="col">작성일</th>
+      <th scope="col">스포유무</th>
+      <th scope="col">추천</th>
+      <th scope="col">비추천</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for review in reviews %}
+    <tr class="text-white">
+      <th scope="row align-middle">{{ review.pk }}</th>
+      <td class="align-middle"><a href="{% url 'community:detail' review.pk %}">{% if review.thumbnail %} <img src="{{ review.thumbnail.url }}" alt="{{ review.title }}_review_img"> {% else %}<img src="https://image.tmdb.org/t/p/w1280{{ review.movie.poster_path }}" alt="{{ review.movie.title}}_poster image" width="100">{% endif %}</a></td>
+      <td class="align-middle"><a class="fw-bold fs-6" href="{% url 'community:detail' review.pk  %}">{{ review.title }}</a><span class="fs-7 text-white-50"> ({{ review.comment_set.all|length }})</span></td>
+      <td class="align-middle">{% if review.user.nickname %}{{ review.user.nickname }}{% else %}{{ review.user }}{% endif %}</td>
+      <td class="align-middle">{{ review.created_at }}</td>
+      <td class="align-middle">{% if review.is_spoiler %}<i class="fas fa-toggle-on text-success"></i>{% else %}<i class="fas fa-toggle-off text-success"></i>{% endif %}</td>
+      <td class="align-middle">{% if user in review.like_users.all %}<i class="fas fa-thumbs-up text-primary"></i> {{ review.like_users.all|length }} {% else %} <i class="far fa-thumbs-up text-primary"></i> {{ review.like_users.all|length }} {% endif %}</td>
+      <td class="align-middle">{% if user in review.dislike_users.all %}<i class="fas fa-thumbs-down text-danger"></i> {{ review.dislike_users.all|length }} {% else %} <i class="far fa-thumbs-down text-danger"></i> {{ review.dislike_users.all|length }} {% endif %} </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% if not reviews %}
+    <p class="text-center mb-5">리뷰를 작성해주세요</p>
+{% endif %}
+    
+    <ul class="my pagination justify-content-center">
+        <!-- 이전페이지 -->
+        {% if reviews.has_previous %}
+        <li class="page-item">
+            <a class="page-link" href="?page={{ reviews.previous_page_number }}">이전</a>
+        </li>
+        {% else %}
+        <li class="page-item disabled">
+            <a class="page-link" tabindex="-1" aria-disabled="true" href="#">이전</a>
+        </li>
+        {% endif %}
+        <!-- 페이지리스트 -->
+        {% for page_number in reviews.paginator.page_range %}
+            {% if page_number == reviews.number %}
+            <li class="page-item active" aria-current="page">
+                <a class="page-link" href="?page={{ page_number }}">{{ page_number }}</a>
+            </li>
+            {% else %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ page_number }}">{{ page_number }}</a>
+            </li>
+            {% endif %}
+        {% endfor %}
+        <!-- 다음페이지 -->
+        {% if reviews.has_next %}
+        <li class="page-item">
+            <a class="page-link" href="?page={{ reviews.next_page_number }}">다음</a>
+        </li>
+        {% else %}
+        <li class="page-item disabled">
+            <a class="page-link" tabindex="-1" aria-disabled="true" href="#">다음</a>
+        </li>
+        {% endif %}
+    </ul>
+  
+{% comment %} 
+
+  <!-- 페이지네이터 -->
+  <div class="d-flex justify-content-center fs-7">
+      <span class="step-links">
+          {% if reviews.has_previous %}
+              <a href="?page=1">&laquo; first</a>
+              <a href="?page={{ reviews.previous_page_number }}">previous</a>
+          {% endif %}
+
+          <span class="current">
+              Page {{ reviews.number }} of {{ reviews.paginator.num_pages }}.
+          </span>
+
+          {% if reviews.has_next %}
+              <a href="?page={{ reviews.next_page_number }}">next</a>
+              <a href="?page={{ reviews.paginator.num_pages }}">last &raquo;</a>
+          {% endif %}
+      </span>
+  </div> {% endcomment %}
+
+{% endblock %}

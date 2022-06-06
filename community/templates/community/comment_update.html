@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% load bootstrap5 %}
+{% block title %}_review's comment 수정{% endblock title %}
+
+{% block content %}
+  <h1 class="fw-bold mt-5 text-center">Review's Comment 수정</h1>
+  <form action="" method="POST" class="col-7 offset-3 mx-auto">
+    <hr class="mb-4"> 
+    {% csrf_token %}
+    {% bootstrap_form comment_form layout='horizontal' %}
+    <input type="submit" value="수정" class="btn btn-secondary offset-3 col-6 mt-4 mb-5">
+  </form>
+{% endblock content %}

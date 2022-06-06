@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% block title %} / 추천영화{% endblock title %}
+
+{% block content %}
+  <div class="container">
+
+    <section class="portfolio-area pt-60">
+            <div class="container">
+                <div class="row flexbox-center">
+                    <div class="col-lg-8 text-center text-lg-left">
+                        <div class="section-title">
+                            <h1 class="fw-bold"><i class="icofont icofont-movie"></i> Movie Recommendation </h1>
+                            <br>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 text-center text-lg-right">
+                        <div class="portfolio-menu">
+                            <ul class="fw-bold">
+                                <li><a class="active" href="{% url 'movies:recommended' 1 %}">제목순</a></li>
+                                <li><a href="{% url 'movies:recommended' 0 %}">인기순</a></li>
+                                <li><a href="{% url 'movies:recommended' 3 %}">평점순</a></li>
+                                <li><a href="{% url 'movies:recommended' 2 %}">최신순</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+
+    {% if tmdb_base %}
+      <p class="fw-bolder text-center text-secondary fs-5"><span class="text-success">스크랩한 영화를 기반으로 <sapn class="text-success">추천된 영화 목록입니다!</span></h5>
+    {% else %}
+      {% if user.is_authenticated %}
+        <p class="fw-bolder text-center text-secondary fs-5"><span class="text-success">랜덤으로 추천된 영화 목록입니다!</span></p>
+      {% else %}
+        <p class="fw-bolder text-center text-secondary fs-5"><span class="text-success">랜덤으로 추천된 영화 목록입니다! <a href={% url 'accounts:login' %}><span class="text-danger text-decoration-underline">로그인</span></a>하시면 스크랩한 영화를 기반으로 추천을 받으실 수 있습니다!</h5>
+      {% endif %}
+    {% endif %}
+    <hr class="mb-4">
+  </div>
+
+    <div class="container">
+      <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-xxl-4">
+        {% for movie in random_movies %}
+          <div class="col mb-5">
+            <div class="card bg-dark card-color col-2.5 my-3 mx-auto">
+              <img class="card-img-top" src="https://image.tmdb.org/t/p/w1280{{ movie.poster_path }}" alt="{{ movie.title }}_poster" width="200px">
+              <div class="card-body bg-dark">
+                <h5 class="card-title fw-bold text-light">{{ movie.title }} <span class="badge badge-info fw-bold text-success">{{ movie.vote_average }}</span></h5>
+              </div>
+              <ul class="list-group list-group-flush">
+                  {% if not tmdb_base %}
+                    <li class="list-group-item bg-dark text-white border-white">장르: {% for genre in movie.genres.all %}{% if forloop.last %}{{ genre.name }} {% else %} {{ genre.name }}, {% endif %} {% endfor %} <!-- 마지막 장르 데이터에는 ',' 붙이지 않도록...-->
+                  {% endif %}
+                  <li class="list-group-item bg-dark text-white border-white">개봉일: {{ movie.release_date }}</li>
+                  <li class="list-group-item bg-dark text-white border-white">인기도: {{ movie.popularity }}</li>
+                  <li class="list-group-item bg-dark text-white border-white">줄거리: {{ movie.overview }}</li>
+              </ul>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+
+{% endblock content %}

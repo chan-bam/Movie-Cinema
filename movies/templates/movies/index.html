@@ -1,0 +1,421 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %} index{% endblock title %}
+
+{% block content %}
+
+
+	<!-- hero area start -->
+			<!-- 인기1위 -->
+		<section class="hero-area" id="home">
+			<div class="container">
+				<div class="hero-area-slider">
+					<div class="row hero-area-slide">
+						<div class="col-lg-6 col-md-5">
+							<div class="hero-area-content">
+								<img src="https://image.tmdb.org/t/p/w1280{{ movies.0.poster_path }}" alt="{{ movies.title }}_poster" />
+							</div>
+						</div>
+						<div class="col-lg-6 col-md-7">
+							<div class="hero-area-content pr-50">
+								<h2 class="fw-bold" >{{ movies.0.title }}</h2>
+								<div class="review">
+									<div class="author-review">
+										<i class="icofont icofont-star"></i>
+										<i class="icofont icofont-star"></i>
+										<i class="icofont icofont-star"></i>
+										<i class="icofont icofont-star"></i>
+										<i class="icofont icofont-star"></i>
+									</div>
+									<h4>👑 인기 1위 ({{ movies.0.popularity }})</h4>
+								</div>
+									<p class="fs-6">평점 : {{ movies.0.vote_average }}</p> 
+									<p class="fs-6">개봉일 : {{ movies.0.release_date }}</p>
+									<p class="fs-6">장르 : {% for genre in movies.0.genres.all %}{% if forloop.last %}{{ genre.name }} {% else %} {{ genre.name }}, {% endif %} {% endfor %}</p>  
+								<br>
+								<p>{{ movies.0.overview | truncatewords:70 }}</p>              
+								<div class="slide-trailor">
+									<h3>Watch Trailer</h3>
+									<a class="theme-btn theme-btn" href="https://www.youtube.com/watch?v={{ movies.0.youtube_path }}"><i class="icofont icofont-play popup-youtube"></i> Play </a>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- 인기 2위 -->
+					<div class="row hero-area-slide">
+						<div class="col-lg-6 col-md-5">
+							<div class="hero-area-content">
+								<img src="https://image.tmdb.org/t/p/w1280{{ movies.1.poster_path }}" alt="{{ movies.title }}_poster" />
+							</div>
+						</div>
+						<div class="col-lg-6 col-md-7">
+							<div class="hero-area-content pr-50">
+								<h2 class="fw-bold">{{ movies.1.title }}</h2>
+								<div class="review">
+									<div class="author-review">
+										<i class="icofont icofont-star"></i>
+										<i class="icofont icofont-star"></i>
+										<i class="icofont icofont-star"></i>
+										<i class="icofont icofont-star"></i>
+										<i class="icofont icofont-star"></i>
+									</div>
+									<h4>👑 인기 2위 ({{ movies.1.popularity }})</h4>
+								</div>
+									<p class="fs-6">평점 : {{ movies.1.vote_average }}</p> 
+									<p class="fs-6">개봉일 : {{ movies.1.release_date }}</p>
+									<p class="fs-6">장르 : {% for genre in movies.1.genres.all %}{% if forloop.last %}{{ genre.name }} {% else %} {{ genre.name }}, {% endif %} {% endfor %}</p> 
+									<br>
+									<p>{{ movies.1.overview | truncatewords:70 }}</p>              
+									<div class="slide-trailor">
+									<h3>Watch Trailer</h3>
+									<a class="theme-btn theme-btn" href="https://www.youtube.com/watch?v={{ movies.1.youtube_path }}"><i class="icofont icofont-play popup-youtube"></i> Play </a>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- 인기3위 -->
+					<div class="row hero-area-slide">
+						<div class="col-lg-6 col-md-5">
+							<div class="hero-area-content">
+								<img src="https://image.tmdb.org/t/p/w1280{{ movies.2.poster_path }}" alt="{{ movies.title }}_poster" />
+							</div>
+						</div>
+						<div class="col-lg-6 col-md-7">
+							<div class="hero-area-content pr-50">
+								<h2 class="fw-bold" >{{ movies.2.title }}</h2>
+								<div class="review">
+									<div class="author-review">
+										<i class="icofont icofont-star"></i>
+										<i class="icofont icofont-star"></i>
+										<i class="icofont icofont-star"></i>
+										<i class="icofont icofont-star"></i>
+										<i class="icofont icofont-star"></i>
+									</div>
+									<h4>👑 인기 3위 ({{ movies.2.popularity }})</h4>
+								</div>
+									<p class="fs-6">평점 : {{ movies.2.vote_average }}</p> 
+									<p class="fs-6">개봉일 : {{ movies.2.release_date }}</p>
+									<p class="fs-6">장르 : {% for genre in movies.2.genres.all %}{% if forloop.last %}{{ genre.name }} {% else %} {{ genre.name }}, {% endif %} {% endfor %}</p> 
+									<br>
+									<p>{{ movies.2.overview | truncatewords:70 }}</p>              
+									<div class="slide-trailor">
+									<h3>Watch Trailer</h3>
+									<a class="theme-btn theme-btn" href="https://www.youtube.com/watch?v={{ movies.2.youtube_path }}"><i class="icofont icofont-play popup-youtube"></i> Play </a>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="hero-area-thumb">
+					<div class="thumb-prev">
+						<div class="row hero-area-slide">
+							<div class="col-lg-6">
+								<div class="hero-area-content">
+									<img src="https://image.tmdb.org/t/p/w1280{{ movies.2.poster_path }}" alt="{{ movies.title }}_poster" />
+								</div>
+							</div>
+							<div class="col-lg-6">
+								<div class="hero-area-content pr-50">
+									<h2 class="fw-bold" >{{ movies.2.title }}</h2>
+									<div class="review">
+										<div class="author-review">
+											<i class="icofont icofont-star"></i>
+											<i class="icofont icofont-star"></i>
+											<i class="icofont icofont-star"></i>
+											<i class="icofont icofont-star"></i>
+											<i class="icofont icofont-star"></i>
+										</div>
+										<h4>👑 인기 3위 ({{ movies.2.popularity }})</h4>
+									</div>
+										<p class="fs-6">평점 : {{ movies.2.vote_average }}</p> 
+										<p class="fs-6">개봉일 : {{ movies.2.release_date }}</p> 
+										<p class="fs-6">장르: {% for genre in movies.2.genres.all %}{% if forloop.last %}{{ genre.name }} {% else %} {{ genre.name }}, {% endif %} {% endfor %}</p>
+										<br>
+										<p>{{ movies.2.overview | truncatewords:70 }}</p>              
+									<div class="slide-trailor">
+										<h3>Watch Trailer</h3>
+										<a class="theme-btn theme-btn" href="https://www.youtube.com/watch?v={{ movies.2.youtube_path }}"><i class="icofont icofont-play popup-youtube"></i> Play </a>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="thumb-next">
+						<div class="row hero-area-slide">
+							<div class="col-lg-6">
+								<div class="hero-area-content">
+									<img src="https://image.tmdb.org/t/p/w1280{{ movies.1.poster_path }}" alt="{{ movies.title }}_poster" />
+								</div>
+							</div>
+							<div class="col-lg-6">
+								<div class="hero-area-content pr-50">
+									<h2 class="fw-bold" >{{ movies.1.title }}</h2>
+									<div class="review">
+										<div class="author-review">
+											<i class="icofont icofont-star"></i>
+											<i class="icofont icofont-star"></i>
+											<i class="icofont icofont-star"></i>
+											<i class="icofont icofont-star"></i>
+											<i class="icofont icofont-star"></i>
+										</div>
+										<h4>👑 인기 2위 ({{ movies.1.popularity }})</h4>
+									</div>
+										<p class="fs-6">평점 : {{ movies.1.vote_average }}</p> 
+										<p class="fs-6">개봉일 : {{ movies.1.release_date }}</p>
+										<p class="fs-6">장르 : {% for genre in movies.1.genres.all %}{% if forloop.last %}{{ genre.name }} {% else %} {{ genre.name }}, {% endif %} {% endfor %}</p> 
+										<br>
+										<p>{{ movies.1.overview | truncatewords:70 }}</p>
+									<div class="slide-trailor">
+										<h3>Watch Trailer</h3>
+										<a class="theme-btn theme-btn2" href="#"><i class="icofont icofont-play"></i> Watch </a>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section><!-- hero area end -->
+
+	<!-- portfolio section start -->
+		<section class="portfolio-area pt-60">
+			<div class="container">
+				<div class="row flexbox-center">
+					<div class="col-lg-12 text-center text-lg-left">
+					    <div class="section-title">
+							<h1 class = "fw-bold"><i class="icofont icofont-movie"></i> Popular Movies </h1>
+						</div>
+					</div>
+				</div>
+				<hr />
+				<!-- 4위 -->
+				<div class="row">
+					<div class="col-lg-9">
+						<div class="row portfolio-item">
+							<div class="col-md-4 col-sm-6 soon released">
+								<div class="single-portfolio">
+									<div class="single-portfolio-img">
+										<img src="https://image.tmdb.org/t/p/w1280{{ movies.3.poster_path }}" alt="{{ movies.title }}_poster" />
+										<a href="https://www.youtube.com/watch?v={{ movies.3.youtube_path }}" class="popup-youtube">
+											<i class="icofont icofont-ui-play"></i>
+										</a>
+									</div>
+									<div class="portfolio-content">
+										<h2 class="fw-bold" >{{ movies.3.title }}</h2>
+										<div class="review">
+											<div class="author-review">
+												<i class="icofont icofont-star"></i>
+												<i class="icofont icofont-star"></i>
+												<i class="icofont icofont-star"></i>
+												<i class="icofont icofont-star"></i>
+												<i class="icofont icofont-star"></i>
+											</div>
+											<h4 class="fs-6">{% for genre in movies.3.genres.all %}{% if forloop.last %}{{ genre.name }} {% else %} {{ genre.name }}/{% endif %} {% endfor %}</h4>
+										</div>
+									</div>
+								</div>
+							</div>
+							<!-- 5위 -->
+							<div class="col-md-4 col-sm-6 top">
+								<div class="single-portfolio">
+									<div class="single-portfolio-img">
+										<img src="https://image.tmdb.org/t/p/w1280{{ movies.4.poster_path }}" alt="{{ movie.title }}_poster" />
+										<a href="https://www.youtube.com/watch?v={{ movies.4.youtube_path }}" class="popup-youtube">
+											<i class="icofont icofont-ui-play"></i>
+										</a>
+									</div>
+									<div class="portfolio-content">
+										<h2 class="fw-bold" >{{ movies.4.title | truncatewords:3 }}</h2>
+										<div class="review">
+											<div class="author-review">
+												<i class="icofont icofont-star"></i>
+												<i class="icofont icofont-star"></i>
+												<i class="icofont icofont-star"></i>
+												<i class="icofont icofont-star"></i>
+											</div>
+											<h4 class="fs-6">{% for genre in movies.4.genres.all %}{% if forloop.last %}{{ genre.name }} {% else %} {{ genre.name }}/{% endif %} {% endfor %}</h4>
+										</div>
+									</div>
+								</div>
+							</div>
+							<!-- 6위 -->
+							<div class="col-md-4 col-sm-6 soon">
+								<div class="single-portfolio">
+									<div class="single-portfolio-img">
+										<img src="https://image.tmdb.org/t/p/w1280{{ movies.5.poster_path }}" alt="{{ movie.title }}_poster" />
+										<a href="https://www.youtube.com/watch?v={{ movies.5.youtube_path }}" class="popup-youtube">
+											<i class="icofont icofont-ui-play"></i>
+										</a>
+									</div>
+									<div class="portfolio-content">
+										<h2 class="fw-bold" >{{ movies.5.title }}</h2>
+										<div class="review">
+											<div class="author-review">
+												<i class="icofont icofont-star"></i>
+												<i class="icofont icofont-star"></i>
+												<i class="icofont icofont-star"></i>
+												<i class="icofont icofont-star"></i>
+												{% comment %} <i class="icofont icofont-star"></i> {% endcomment %}
+											</div>
+											<h4 class="fs-6">{% for genre in movies.5.genres.all %}{% if forloop.last %}{{ genre.name }} {% else %} {{ genre.name }}/{% endif %} {% endfor %}</h4>
+										</div>
+									</div>
+								</div>
+							</div>
+							<!-- 7위 -->
+							<div class="col-md-4 col-sm-6 top released">
+								<div class="single-portfolio">
+									<div class="single-portfolio-img">
+										<img src="https://image.tmdb.org/t/p/w1280{{ movies.6.poster_path }}" alt="{{ movies.title }}_poster" />
+										<a href="https://www.youtube.com/watch?v={{ movies.6.youtube_path }}" class="popup-youtube">
+											<i class="icofont icofont-ui-play"></i>
+										</a>
+									</div>
+									<div class="portfolio-content">
+										<h2 class="fw-bold" >{{ movies.6.title }}</h2>
+										<div class="review">
+											<div class="author-review">
+												<i class="icofont icofont-star"></i>
+												<i class="icofont icofont-star"></i>
+												<i class="icofont icofont-star"></i>
+												<i class="icofont icofont-star"></i>
+												{% comment %} <i class="icofont icofont-star"></i> {% endcomment %}
+											</div>
+											<h4 class="fs-6">{% for genre in movies.6.genres.all %}{% if forloop.last %}{{ genre.name }} {% else %} {{ genre.name }}/{% endif %} {% endfor %}</h4>
+										</div>
+									</div>
+								</div>
+							</div>
+							<!-- 8위 -->
+							<div class="col-md-4 col-sm-6 released">
+								<div class="single-portfolio">
+									<div class="single-portfolio-img">
+										<img src="https://image.tmdb.org/t/p/w1280{{ movies.7.poster_path }}" alt="{{ movies.title }}_poster" />
+										<a href="https://www.youtube.com/watch?v={{ movies.7.youtube_path }}" class="popup-youtube">
+											<i class="icofont icofont-ui-play"></i>
+										</a>
+									</div>
+									<div class="portfolio-content">
+										<h2 class="fw-bold" >{{ movies.7.title }}</h2>
+										<div class="review">
+											<div class="author-review">
+												<i class="icofont icofont-star"></i>
+												<i class="icofont icofont-star"></i>
+												<i class="icofont icofont-star"></i>
+												<i class="icofont icofont-star"></i>
+												{% comment %} <i class="icofont icofont-star"></i> {% endcomment %}
+											</div>
+											<h4 class="fs-6">{% for genre in movies.7.genres.all %}{% if forloop.last %}{{ genre.name }} {% else %} {{ genre.name }}/{% endif %} {% endfor %}</h4>
+										</div>
+									</div>
+								</div>
+							</div>
+							<!-- 9위 -->
+							<div class="col-md-4 col-sm-6 soon top">
+								<div class="single-portfolio">
+									<div class="single-portfolio-img">
+										<img src="https://image.tmdb.org/t/p/w1280{{ movies.8.poster_path }}" alt="{{ movies.title }}_poster" />
+										<a href="https://www.youtube.com/watch?v={{ movies.8.youtube_path }}" class="popup-youtube">
+											<i class="icofont icofont-ui-play"></i>
+										</a>
+									</div>
+									<div class="portfolio-content">
+										<h2 class="fw-bold" >{{ movies.8.title | truncatewords:3 }}</h2>
+										<div class="review">
+											<div class="author-review">
+												<i class="icofont icofont-star"></i>
+												<i class="icofont icofont-star"></i>
+												<i class="icofont icofont-star"></i>
+												<i class="icofont icofont-star"></i>
+												{% comment %} <i class="icofont icofont-star"></i> {% endcomment %}
+											</div>
+											<h4 class="fs-6">{% for genre in movies.8.genres.all %}{% if forloop.last %}{{ genre.name }} {% else %} {{ genre.name }}/{% endif %} {% endfor %}</h4>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-lg-3 text-center text-lg-left">
+					    <div class="portfolio-sidebar">
+							<img src="{% static '/img/sidebar/sidebar1.png' %}" alt="sidebar" />
+							<img src="{% static '/img/sidebar/sidebar2.png' %}" alt="sidebar" />
+							<img src="{% static '/img/sidebar/sidebar3.png' %}" alt="sidebar" />
+							<img src="{% static '/img/sidebar/sidebar4.png' %}" alt="sidebar" />
+						</div>
+					</div>
+				</div>
+			</div>
+		</section><!-- portfolio section end -->
+		<br>
+
+<!-- ALl movies -->
+		<br>
+<div>
+
+  <div class="container">
+		<hr>
+		<h1 class="fw-bold my-3 text-center"><i class="icofont icofont-movie text-warning"></i> All Movies</h1>
+		<hr>
+		<br>
+    <div class="movie-list row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-xxl-4" >
+      {% for movie in movies %}
+        <div class="movie col mb-5">
+          <div class="card h-250 bg-dark card-color" style="width: 18rem;">
+            <a href="{% url 'movies:detail' movie.pk %}"><img src="https://image.tmdb.org/t/p/w1280{{ movie.poster_path }}" alt="{{ movie.title }}_poster" class="card-img-top" width="100"></a>
+            <div class="card-body bg-dark">
+              <h5 class="card-title fw-bold text-white">{{ movie.title }} <span class="badge badge-info fw-bold text-success">{{ movie.vote_average }}</span></h5>
+              <p class="card-text text-white">{{ movie.overview | truncatechars:100  }}...</p>
+              <a href="{% url 'movies:detail' movie.pk %}" class="btn btn-secondary offset-6 mt-3">자세히 보기</a>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+<script>
+  let pageNum = 2
+
+  document.addEventListener('scroll', (event) => {
+    // console.log(event)
+    const {scrollHeight, scrollTop, clientHeight} = document.documentElement
+    // console.log(scrollHeight, scrollTop, clientHeight)
+    if (scrollHeight - Math.round(scrollTop) === clientHeight) {
+      axios({
+        method: 'get',
+        url: `/movies/?page=${pageNum}`,
+        headers: {'x-requested-with': 'XMLHttpRequest'}
+      })
+        .then((res) => {
+          const movies = res.data
+          
+          movies.forEach((movie) => {
+            const movieList = document.querySelector('.movie-list')
+            const movieDiv = document.createElement('div')
+
+            const movieHTML = `
+              <div class="col mb-5">
+                <div class="card h-250 bg-dark card-color" style="width: 18rem;">
+                  <a href="${ movie.pk }/"><img src="https://image.tmdb.org/t/p/w500${ movie.fields.poster_path }" alt="${ movie.fields.title }_poster" class="card-img-top" width="100px"></a>
+                  <div class="card-body">
+                    <h5 class="card-title">${ movie.fields.title }</h5>
+                    <p class="card-text">${ movie.fields.overview.substring(0, 100) }...</p>
+                    <a href="${ movie.pk }/" class="btn btn-secondary offset-6">자세히 보기</a>
+                  </div>
+                </div>
+              </div>
+            `
+            movieDiv.innerHTML = movieHTML
+
+            movieList.appendChild(movieDiv)
+
+          })
+          pageNum += 1
+        })
+    }
+  })
+</script>
+	
+{% endblock content %}

@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% block title %} | {{ person.username }}'s Follow list{% endblock title %}
+
+
+{% block content %}
+<div class="container col-3 text-center">
+  <hr class="mt-3">
+    {% if person.nickname %}
+    <h2 class="fw-bold mt-3 text-center text-success"><span class="text-warning fs-1">{{ person.nickname }}</span>'s Follow List</h1>
+    {% else %}
+    <h2 class="fw-bold mt-3 text-center text-success"><span class="text-warning fs-1">{{ person.username }}</span>'s Follow List</h2>
+    {% endif %}
+    <hr class="mb-5"> 
+
+
+  {% with followings=person.followings.all followers=person.followers.all %}
+  
+  <h3 class="text-success fw-bold my-3">Followings</h3>
+    <ul>
+      {% for following in followings %}
+        <li class="fs-5">🤝<a class="text-decoration-underline fw-bold text-white-50" href="{% url 'accounts:profile' following.username %}">{% if following.nickname %}{{ following.nickname }}{% else %}{{ following.username }}{% endif %}</a></li>
+      {% empty %}
+      <p>follwing한 user가 없어요🙄</p>
+      {% endfor %}
+    </ul>
+
+  <hr class="my-4">
+
+  <h3 class="text-success fw-bold my-3">Followers</h3>
+    <ul>
+      {% for follower in followers %}
+      <li class="fs-5">👐 <a class="text-decoration-underline fw-bold text-white-50" href="{% url 'accounts:profile' follower.username %}">{% if follower.nickname %}{{ follower.nickname }}{% else %}{{ follower.username }}{% endif %}</a></li>
+      {% empty %}
+      <p>follower가 없어요😢</p>
+      {% endfor %}
+    </ul>
+    
+  <hr class="my-5">
+  
+  {% endwith %}
+</div>
+
+{% endblock content %}

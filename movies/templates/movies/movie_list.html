@@ -1,0 +1,152 @@
+{% extends 'base.html' %}
+
+{% block title %} index{% endblock title %}
+
+{% block content %}
+
+    <!-- ALl movies -->
+
+<div class="container">
+
+    <section class="portfolio-area pt-60">
+            <div class="container">
+                <div class="row flexbox-center">
+                    <div class="col-lg-8 text-center text-lg-left">
+                        <div class="section-title">
+                            <h1 class="fw-bold"><i class="icofont icofont-movie"></i> All Movies </h1>
+              <br>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 text-center text-lg-right">
+                        <div class="portfolio-menu">
+                            <ul class="fw-bold">
+                                <li><a href="{% url 'movies:movie_list' 1 %}">제목순</a></li>
+                                <li><a href="{% url 'movies:movie_list' 2 %}">최신순</a></li>
+                                <li><a href="{% url 'movies:movie_list' 0 %}">인기순</a></li>
+                                <li><a href="{% url 'movies:movie_list' 3 %}">평점순</a></li>
+                                <li><a href="{% url 'movies:movie_list' 4 %}">스크랩 많은 순</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <hr />
+
+
+
+
+    <!-- 셀렉트 박스 -->
+  {% comment %} <div class="row-col-2 offset-10 mb-3 me-4">
+    <select id="sort-select" class="form-select col-3" onchange="location = this.value;">
+      <option class="default" value="/">------------</option>
+      <option class="sort-popularity" value="?sort=popularity">인기순</option>
+      <option class="sort-date" value="?sort=date">개봉일 최신순</option>
+      <option class="sort-tmdb-rate" value="?sort=tmdb-rate">TMDB 평점순</option>
+      <option class="sort-scraps" value="?sort=scraps">스크랩 많은순</option>
+    </select>
+  </div> {% endcomment %}
+
+
+
+
+
+
+    <div class="movie-list row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-xxl-4" >
+      {% for movie in movies %}
+        <div class="movie col mb-5">
+          <div class="card h-250 bg-dark card-color" style="width: 18rem;">
+            <a href="{% url 'movies:detail' movie.pk %}"><img src="https://image.tmdb.org/t/p/w1280{{ movie.poster_path }}" alt="{{ movie.title }}_poster" class="card-img-top" width="100"></a>
+            <div class="card-body bg-dark">
+              <h5 class="card-title fw-bold text-white">{{ movie.title }} <span class="badge badge-info fw-bold text-success">{{ movie.vote_average }}</span></h5>
+              <p class="card-text text-white">{{ movie.overview | truncatechars:100  }}...</p>
+              <a href="{% url 'movies:detail' movie.pk %}" class="btn btn-secondary offset-6 mt-3">자세히 보기</a>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+
+      <ul class="my pagination justify-content-center">
+        <!-- 이전페이지 -->
+        {% if movies.has_previous %}
+        <li class="page-item">
+            <a class="page-link" href="?page={{ movies.previous_page_number }}">이전</a>
+        </li>
+        {% else %}
+        <li class="page-item disabled">
+            <a class="page-link" tabindex="-1" aria-disabled="true" href="#">이전</a>
+        </li>
+        {% endif %}
+        <!-- 페이지리스트 -->
+        {% for page_number in movies.paginator.page_range %}
+            {% if page_number == movies.number %}
+            <li class="page-item active" aria-current="page">
+                <a class="page-link" href="?page={{ page_number }}">{{ page_number }}</a>
+            </li>
+            {% else %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ page_number }}">{{ page_number }}</a>
+            </li>
+            {% endif %}
+        {% endfor %}
+        <!-- 다음페이지 -->
+        {% if movies.has_next %}
+        <li class="page-item">
+            <a class="page-link" href="?page={{ movies.next_page_number }}">다음</a>
+        </li>
+        {% else %}
+        <li class="page-item disabled">
+            <a class="page-link" tabindex="-1" aria-disabled="true" href="#">다음</a>
+        </li>
+        {% endif %}
+    </ul>
+</div>
+
+
+
+
+{% comment %} 
+<script>
+  let pageNum = 2
+
+  document.addEventListener('scroll', (event) => {
+    // console.log(event)
+    const {scrollHeight, scrollTop, clientHeight} = document.documentElement
+    // console.log(scrollHeight, scrollTop, clientHeight)
+    if (scrollHeight - Math.round(scrollTop) === clientHeight) {
+      axios({
+        method: 'get',
+        url: `/movies/?page=${pageNum}`,
+        headers: {'x-requested-with': 'XMLHttpRequest'}
+      })
+        .then((res) => {
+          const movies = res.data
+          
+          movies.forEach((movie) => {
+            const movieList = document.querySelector('.movie-list')
+            const movieDiv = document.createElement('div')
+
+            const movieHTML = `
+              <div class="col mb-5">
+                <div class="card h-250 bg-dark card-color" style="width: 18rem;">
+                  <a href="${ movie.pk }/"><img src="https://image.tmdb.org/t/p/w500${ movie.fields.poster_path }" alt="${ movie.fields.title }_poster" class="card-img-top" width="100px"></a>
+                  <div class="card-body">
+                    <h5 class="card-title">${ movie.fields.title }</h5>
+                    <p class="card-text">${ movie.fields.overview.substring(0, 100) }...</p>
+                    <a href="${ movie.pk }/" class="btn btn-secondary offset-6">자세히 보기</a>
+                  </div>
+                </div>
+              </div>
+            `
+            movieDiv.innerHTML = movieHTML
+
+            movieList.appendChild(movieDiv)
+
+          })
+          pageNum += 1
+        })
+    }
+  })
+</script> {% endcomment %}
+
+{% endblock content %}

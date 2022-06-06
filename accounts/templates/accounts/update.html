@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% load bootstrap5 %}
+{% block title %}_update{% endblock title %}
+
+{% block content %}
+  <h1 class="fw-bold mt-5 text-center">회원정보 수정</h1>
+  <form action="{% url 'accounts:update' %}" method="POST" enctype="multipart/form-data" class="col-5 offset-3 mx-auto">
+    <hr class="mb-4">
+    {% csrf_token %}
+    {% bootstrap_form form layout='horizontal' %}
+    <input type="submit" value="회원정보수정" class="btn btn-secondary offset-3 col-6 mt-4">
+  </form>
+  <form action="{% url "accounts:signout" %}" method="POST" class="col-5 offset-3 mx-auto">
+    {% csrf_token %}
+    <button class="btn btn-danger offset-3 col-6 mt-4">회원 탈퇴하기</button>
+  </form>
+{% endblock content %}

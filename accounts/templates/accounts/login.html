@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% load socialaccount %}
+{% load bootstrap5 %}
+{% block title %}_login{% endblock title %}
+
+{% block content %}
+
+  <h1 class="fw-bold mt-5 text-center">Login</h1>
+  <form action="" method="POST" class="col-5 offset-3 mx-auto">
+    <hr class="mb-4">
+    {% csrf_token %}
+    {% bootstrap_form form layout='horizontal' %}
+    <input type="submit" value="로그인" class="btn btn-secondary offset-3 col-6 mt-4">
+    <a class="btn btn-primary col-6 offset-3 mt-1 mb-5" href="{% provider_login_url 'google' next="/movies/" %}">google 계정으로 로그인하기</a>
+  </form>
+
+{% endblock content %}

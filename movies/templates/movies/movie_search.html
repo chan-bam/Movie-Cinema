@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% load bootstrap5 %}
+
+{% block content %}
+  {% if movies %}
+  <div class="container">
+    <p>"{{ keyword }}"(으)로 검색한 결과입니다.</p>
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-xxl-4">
+    {% for movie in movies %}
+    <div class="col mb-5 mx-auto">
+      <div class="card bg-dark card-color" style="width: 18rem;">
+        <a href="{% url 'movies:detail' movie.pk %}">
+          <img src="https://image.tmdb.org/t/p/w1280{{ movie.poster_path }}" class="card-img-top" alt="{{ movie.title }} poster" style="height: 390px">
+        </a>
+        <div class="card-body">
+          <h5 class="card-title fw-bold text-white">{{ movie.title }} <span class="badge badge-info fw-bold text-success">{{ movie.vote_average }}</span></h5>
+          <p class="card-text">{{ movie.overview | truncatewords:20 }}<p/>
+          <a href="{% url 'movies:detail' movie.pk %}" class="btn btn-secondary offset-6 mt-3">자세히 보기</a>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+    </div>
+  </div>
+
+  {% else %}
+    <p>검색 결과가 존재하지 않습니다.</p>
+  {% endif%}
+
+<style>
+  .card:hover {
+    background-color: #E2E2E2;
+  }
+</style>
+{% endblock content %}

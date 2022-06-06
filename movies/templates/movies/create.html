@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% load bootstrap5 %}
+{% block title %} info create{% endblock title %}
+
+{% block content %}
+  <h1 class="fw-bold mt-5 text-center">영화 정보 등록하기</h1>
+  <form action="" method="POST" class="col-7 offset-3 mx-auto">
+    <hr class="mb-4">    
+    {% csrf_token %}
+    {% bootstrap_form form layout='horizontal' %}
+    <button class="btn btn-secondary offset-3 col-6 mt-4 mb-5">등록</button>
+  </form>
+{% endblock content %}

@@ -1,0 +1,41 @@
+  {% load bootstrap5 %}
+  <h4 class="my-3">댓글 목록</h4>
+  <div>
+    {% if comments %}
+      <p class="mb-2 fs-6 fw-bold">{{ comments|length }}개의 댓글이 있습니다.</p>
+        {% for comment in comments %}
+         <ul class="mb-2">
+          <li class="d-inline ms-1 me-2">
+            <a href="{% url 'accounts:profile' comment.user %}">{% if comment.user.nickname %}{{ comment.user.nickname }}{% else %}{{ comment.user }}{% endif %}</a>: {{ comment.content }}
+          </li>
+          {% if user == comment.user %}
+            <a class="btn btn-secondary btn-sm" href="{% url 'community:comment_update' review.pk comment.pk %}">수정</a>
+          {% endif %}
+          {% if user == comment.user or user.is_staff %}
+          <form action="{% url 'community:comment_delete' review.pk comment.pk %}" method="POST" class="d-inline">
+            {% csrf_token %}
+            <button class="btn btn-secondary btn-sm">삭제</button>
+          </form>
+          {% endif %}
+          <hr class="my-1">
+        </ul>
+        {% endfor %}
+    {% else %}
+      <p><b>댓글을 남겨주세요.</b></p>
+    {% endif %}
+  </div>
+
+
+  <div>
+    {% if request.user.is_authenticated %}
+      <form action="{% url 'community:comment_create' review.pk %}" method="POST" class="col-5">
+        {% csrf_token %}
+      {% bootstrap_form comment_form %}
+      <input type="submit" value="작성" class="btn btn-secondary offset-3 col-6 mt-2 mb-5">
+      </form>
+    {% else %}
+      <a class="btn btn-secondary mt-2 mb-5" href="{% url 'accounts:login' %}">댓글을 작성하려면 로그인하세요.</a>
+    {% endif %}
+  </div>
+  <a class="btn btn-dark" href="{% url 'community:index' %}">Back</a>
+

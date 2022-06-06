@@ -1,0 +1,135 @@
+{% extends 'base.html' %}
+{% block title %}_detail{% endblock title %}
+
+{% block content %}
+
+
+<div class="container col-8">
+  <div>
+    <hr class="mt-5 mb-2">
+      <p class="ms-2">영화 상세정보</p>
+    <hr class="mt-2 mb-5">
+      <h3 class="fw-bold mt- me-2 d-inline">{{ movie.title }}</h3>
+      {% if user.is_staff %}
+        <a class="btn btn-secondary btn-sm" href="{% url 'movies:update' movie.pk %}">수정</a>
+        <form action="{% url 'movies:delete' movie.pk %}" method="POST" class="d-inline">
+          {% csrf_token %}
+          <button class="btn btn-secondary btn-sm">삭제</button>
+        </form>
+      {% endif %}
+  </div>
+  <hr>
+
+
+
+
+  <div class="row">
+    <div class="col">
+      <img src="https://image.tmdb.org/t/p/w1280{{ movie.poster_path }}" alt="{{ movie.title }}_poster" width="680px">
+    </div>
+    <div class="col my-2 text-white fs-6">
+      <p class="mb-2">개봉일: {{ movie.release_date }}</p>
+      <p class="mb-2">Popularity: {{ movie.popularity }}</p>
+      <p class="mb-2">장르: {% for genre in movie.genres.all %}{% if forloop.last %}{{ genre.name }} {% else %} {{ genre.name }}, {% endif %} {% endfor %}</p>  <!-- 마지막 장르 데이터에는 ',' 붙이지 않도록...-->
+      <p class="mb-2">줄거리: {{ movie.overview }}</p>
+      <p class="mb-2">TMDB 평점: {{ movie.vote_average }}</p>
+      <p class="mb-2">TMDB 평점 참여자수: {{ movie.vote_count }}</p>
+      {% if reviewer_count %}
+        <p class="mb-2">Reviewer 평점: {{ reviewer_rank }}</p> 
+        <p class="mb-2">Reviewer 평점 참여자수: {{ reviewer_count }}</p> 
+      {% else %}
+        <p class="mb-2">Reviewer 평점: <span class="text-danger">아직 리뷰 데이터가 없습니다!<span></p> 
+        <p class="mb-2">Reviewer 평점 참여자수: <span class="text-success">리뷰를 남겨주세요!<span></p> 
+      {% endif %}
+      {% if movie.youtube_path %} <!-- youtube path 있을 때만 렌더링 -->
+        <iframe width="560" height="300" src="https://www.youtube.com/embed/{{ movie.youtube_path }}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+      {% endif %}
+    </div>
+  </div>
+
+
+
+
+
+
+  <div class="d-flex justify-content-center my-5">
+    <form id="scrap-form" data-movie-id="{{ movie.pk }}">
+        {% csrf_token %}
+        {% if user in movie.scrap_users.all %}
+          <button id="#scrapBtn" class="btn btn-outline-light"><i id="scrapIcon" class="fas fa-star text-warning">{{ movie.scrap_users.all | length }}</i></button>
+        {% else %}
+          <button id="#scrapBtn" class="btn btn-outline-light"><i id="scrapIcon" class="far fa-star text-warning">{{ movie.scrap_users.all | length }}</i></button>
+        {% endif %}
+    </form>
+  </div>
+
+
+  <hr>
+  
+  <div class="row">
+    <div class="col">
+      <a class="btn btn-secondary mb-3" href="{% url 'community:create' movie.pk %}">리뷰 작성하러 가기</a>
+      {% if reviews %} <!-- 달린 리뷰가 있으면 5개까지(view에서 지정) 렌더링 -->
+      <h4 class="fw-bold mb-3">이 영화에 달린 리뷰</h4>
+        <ul class="mb-2">
+          {% for review in reviews %}
+            <li class="ms-2 me-2 d-inline">{{ review.title }}</li><a class="btn btn-warning btn-sm" href="{% url 'community:detail' review.pk %}">자세히 보기</a>
+          <hr class="my-2"> 
+          {% endfor %}
+        </ul>
+      {% endif %}
+    </div>
+
+
+      {% include 'movies/_comment.html' %}
+  </div>
+   <a class="btn btn-dark" href="{% url 'movies:movie_list' 0 %}">Back</a>
+</div>
+
+
+<script>
+  const form = document.querySelector('#scrap-form')
+  const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+  form.addEventListener('submit', function(event) {
+    event.preventDefault()
+    // console.log(event.target.dataset)
+    const movieId = event.target.dataset.movieId
+
+    axios({
+      method: 'post',
+      url: `/movies/${movieId}/scraps/`,
+      headers: {'X-CSRFToken': csrftoken}
+    })
+
+    .then(response => {
+      // console.log(response)
+      const isScraped = response.data.isScraped
+      const scrap_count = response.data.scrap_count
+
+      // const scrapBtn = document.querySelector('#scrapBtn')
+      const scrapIcon = document.querySelector('#scrapIcon')
+
+      // console.log(scrapBtn)
+
+      if (isScraped) {
+         scrapIcon.classList.remove('far')
+         scrapIcon.classList.add('fas')
+         scrapIcon.innerText = scrap_count
+       }
+       else {
+         scrapIcon.classList.remove('fas')
+         scrapIcon.classList.add('far')
+         scrapIcon.innerText = scrap_count
+       }
+    })
+    .catch(err => {
+      if (err.response.status === 401) {  
+        window.location.href = '../../accounts/login/' // 로그인 경로로 이동시킴
+      }
+    })
+  })
+
+</script>
+
+{% endblock content %}

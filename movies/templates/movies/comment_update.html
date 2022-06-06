@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% load bootstrap5 %}
+{% block title %} / {{ movie_title }} / 한줄평 수정{% endblock title %}
+
+{% block content %}
+<h3 class="fw-bold mt-5 text-center">{{ movie_title }} > 한줄평 수정</h3>
+<hr class="mb-4"> 
+  <form action="" method="POST" class="col-7 offset-3 mx-auto">
+    {% csrf_token %}
+    {% bootstrap_form comment_form layout='horizontal' %}
+    <input type="submit" value="수정" class="btn btn-secondary offset-3 col-6 mt-4 mb-5">
+  </form>
+{% endblock content %}

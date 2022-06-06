@@ -1,0 +1,40 @@
+{% load bootstrap5 %}
+<div class="col">
+  <div>
+    <h4 class="fw-bold mb-3">한줄평</h4>
+    {% if comments %}
+      <p class="mb-2 fs-6 fw-bold">{{ comments | length }}개의 한줄평이 있습니다!</p>
+      {% for comment in comments %}
+        <ul class="mb-2">
+          <li class="d-inline ms-2 me-2"><a href="{% url 'accounts:profile' comment.user %}">{% if comment.user.nickname %}{{ comment.user.nickname }}{% else %}{{ comment.user }}{% endif %}</a>: {{ comment.content }}
+          </li>
+        {% if user == comment.user %}
+          <a class="btn btn-secondary btn-sm" href="{% url 'movies:comment_update' movie.pk comment.pk %}">수정</a>
+        {% endif %}
+        {% if user == comment.user or user.is_staff %}
+          <form action="{% url 'movies:comment_delete' movie.pk comment.pk %}" method="POST" class="d-inline">
+            {% csrf_token %}
+            <button class="btn btn-secondary btn-sm">삭제</button>
+          </form>
+        {% endif %}
+        <hr class="my-1"> 
+        </ul>
+      {% endfor %}
+    {% else %}
+      <p>한줄평이 없습니다</p>  
+    {% endif %}
+  </div>
+
+<div>
+  {% if request.user.is_authenticated %}
+    <form class="mt-3" action="{% url 'movies:comment_create' movie.pk %}" method="POST">
+      {% csrf_token %}
+      {% bootstrap_form comment_form %}
+      <input type="submit" value="작성" class="btn btn-secondary offset-3 col-6 mt-2 mb-5">
+    </form>
+  {% else %}
+  <a class="btn btn-secondary mt-2 mb-5" href="{% url 'accounts:login' %}">한줄평을 작성하려면 로그인하세요</a>
+  
+  {% endif %}
+</div>
+</div>

@@ -1,0 +1,129 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %} {{ person.username }}'s profile{% endblock title %}
+
+
+{% block content %}
+  <div class="container col-3">
+    <hr>
+    {% if person.nickname %}
+    <h2 class="fw-bold mt-3 text-center text-success"><span class="text-warning fs-1">{{ person.nickname }}</span>'s Profile Page</h1>
+    {% else %}
+    <h2 class="fw-bold mt-3 text-center text-success"><span class="text-warning fs-1">{{ person.username }}</span>'s Profile Page</h2>
+    {% endif %}
+    <hr>
+
+    <div class="text-center">
+      {% if person.profile_image %}
+        <img class="my-3" src="{{ person.profile_image.url }}">
+      {% else %}
+        <img class="my-3" src="{% static 'accounts/profile_default_image.png' %}" width="200">
+      {% endif %}
+      <br>
+      {% if user == person %}
+        <a class="btn btn-secondary my-2"href="{% url 'accounts:update' %}">회원정보수정</a>
+      {% endif %}
+
+      {% with followings=person.followings.all followers=person.followers.all scraps=person.scrap_movies.all likes=person.like_reviews.all dislikes=person.dislike_reviews.all %}
+        <div>
+          <div>
+              <a id="follow-count" class="btn btn-success" href="{% url 'accounts:follow_list' person.username %}">팔로잉 : {{ followings|length }}  　|　  팔로워 : {{ followers|length }}</a> <!-- 클릭시 follow_list로 이동하도록... -->
+            </div>
+            {% if user != person %}
+              <div>
+                <form id="follow-form" data-user-id="{{ person.pk }}">
+                  {% csrf_token %}
+                  {% if request.user in followers %}
+                    <button id="followBtn" class="btn btn-danger my-3">언팔로우</button>
+                  {% else %}
+                    <button id="followBtn" class="btn btn-primary my-3">팔로우</button>
+                  {% endif %}
+                </form>
+              </div>
+            {% endif %}
+          </div>
+
+        <hr>
+        <h3 class="text-success fw-bold my-3"><span class="text-warning">스크랩</span>한 영화</h3>
+        <ul>
+          {% for scrap in scraps %}
+            <li>✔ <a class="text-decoration-underline" href="{% url 'movies:detail' scrap.pk %}">{{ scrap.title }}<a/></li>
+          {% empty %}
+          <p>스크랩한 영화가 없어요😅</p>
+          {% endfor %}
+        </ul>
+
+        <hr>
+        <h3 class="text-success fw-bold my-3"><span class="text-warning" >좋아요</span>한 리뷰</h3>
+        <ul>
+          {% for like in likes %}
+            <li>✔ <a class="text-decoration-underline" href="{% url 'community:detail' like.pk %}">{{ like.title }}</a></li>
+          {% empty %}
+          <p>좋아요👍한 리뷰가 없어요😥</p>
+          {% endfor %}
+        </ul>
+
+        <hr>
+        <h3 class="text-success fw-bold my-3"><span class="text-warning">싫어요</span>한 리뷰</h3>
+        <ul>
+          {% for dislike in dislikes %}
+            <li>✔ <a class="text-decoration-underline" href="{% url 'community:detail' dislike.pk %}">{{ dislike.title }}</a></li>
+          {% empty %}
+          <p>싫어요👎한 리뷰가 없어요😊</p>
+          {% endfor %}
+        </ul>
+        
+        <hr>
+    </div>
+  </div>
+  {% endwith %}
+
+
+
+<script>
+  const form = document.querySelector('#follow-form')
+  const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+  form.addEventListener('submit', function(event) {
+    event.preventDefault()
+    const userId = event.target.dataset.userId
+
+    axios({
+      method: 'post',
+      url: `/accounts/${userId}/follow/`,
+      headers: {'X-CSRFToken': csrftoken}
+    })
+
+    .then(response => {
+      //console.log(response)
+      const isFollowed = response.data.isFollowed
+      const followers_count = response.data.followers_count
+      const followings_count = response.data.followings_count
+
+      const followBtn = document.querySelector('#followBtn')
+
+      // console.log(followBtn)
+
+      followBtn.classList.toggle('btn-danger')
+      followBtn.classList.toggle('btn-primary')
+
+      if (isFollowed) {
+        followBtn.innerText = '언팔로우'
+      }
+      else {
+        followBtn.innerText = '팔로우'
+      }
+    const followDiv = document.querySelector('#follow-count')
+    followDiv.innerText = `팔로잉 : ${followings_count} / 팔로워 : ${followers_count}`
+    })
+    .catch(err => { //로그인 안했는데 팔로우요청 보낸 경우
+      if (err.response.status === 401) {  
+        window.location.href = '../../login/' // 로그인 경로로 이동시킴
+      }
+    })
+  })
+
+</script>
+
+
+{% endblock %}
